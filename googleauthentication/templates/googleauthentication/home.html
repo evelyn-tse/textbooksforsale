@@ -1,0 +1,130 @@
+{# Load the tag library #}
+{% load bootstrap5 %}
+{% load static %}
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% load socialaccount %}
+
+<!DOCTYPE html>
+<html>
+
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+      
+   <head>
+      <title>Textbooks For Sale</title>
+   </head>
+   <body>
+
+      {%for i in response%}
+      {{i.subject}}
+      {%endfor%}
+
+      {% load socialaccount %}
+      {% csrf_token %}
+
+      {% if user.is_authenticated %}
+
+          <!-- Navbar  -->
+          <nav class="navbar navbar-dark" style="background-color: #6db8d2;">
+            <div class="container-fluid" style="display:flex;">
+              <a class="navbar-brand" style="font-size:25px;" href="https://textbooksforsale.herokuapp.com/">
+                <img src="https://www.freeiconspng.com/thumbs/book-icon/book-stack-icon--icon-search-engine-16.png" alt="" width="45" height="36" class="d-inline-block align-text-top">
+                Textbooks For Sale
+              </a>
+              <nav class="nav" style="display:flex; align-items:center; justify-content:center;">
+                <a class="nav-link" style="color:white; font-size:20px;" href="{% url 'searchView' %}">Search</a>
+                <!-- <a class="nav-link" style="color:white; font-size:20px;" href="#">Listings</a> -->
+                <a class="nav-link" style="color:white; font-size:20px;" href="{% url 'department_list' %}">Classes</a>
+                <a class="nav-link" style="color:white; font-size:20px;" href="{% url 'SubmissionView' %}">Sell</a>
+                <div class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="{{ user.socialaccount_set.all.0.get_avatar_url }}" style="border-radius: 50%; max-width: 45px; max-height: 45px;">
+                  </a>
+                  <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <!--<li><a class="dropdown-item" href="https://textbooksforsale.herokuapp.com/accounts/logout/">Logout</a></li>-->
+                    <li><a class="dropdown-item" href="{% url 'accountView' %}">Account</a></li>
+                    <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                  </ul>
+                 </div>
+               </nav>
+               
+            </div>
+          </nav>
+          <!-- Navbar -->
+
+      <div class="card text-black" >
+         <img src="https://media.istockphoto.com/photos/textbooks-stacked-on-school-desk-with-chalkboard-background-picture-id638383032?b=1&k=20&m=638383032&s=170667a&w=0&h=T8UqCXjblfdTPKu4LlLHqJWizWbd3LEhEkJHAMcB83I=" class="card-img" alt="..." style="max-height:500px;">
+         <div class="card-img-overlay" style="margin-top:70px; margin-left: 200px;">
+           <h1 class="card-title">Welcome, {{ user.username }}!</h1>
+           <p style="font-size:20px;">Instead of selling your books back to the <br> bookstore, post them here and try to either <br> trade them or sell them to someone else!</p>
+           <div class="pt-1 mb-6" style="margin: 15px;">
+            <a href = "textbook/departments" ><button class="btn btn-dark btn-lg btn-block" style="background-color: #0c4767; min-width:300px;" type="button">Begin Browsing</button></a>
+           </div>
+         </div>
+       </div>
+
+      <!-- Footer -->
+      <footer class="text-center text-lg-start bg-light text-muted">
+         <!-- Copyright -->
+         <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">
+         © 2022 Copyright: B-17
+         </div>
+         <!-- Copyright -->
+      </footer>
+      <!-- Footer -->
+
+      {% else %}
+
+      <!-- Section: Design Block -->
+      <section class="text-center">
+         <!-- Background image -->
+         <div class="p-5 bg-image" style="
+               background-image: url('https://th.bing.com/th/id/R.5946f5971cc64126e4c829935126ad04?rik=DjklibZS86SYiA&riu=http%3a%2f%2fwallup.net%2fwp-content%2fuploads%2f2017%2f03%2f27%2f198689-texture-abstract-blue.jpg&ehk=3XqKUTshrrEPc%2fyAQCwdQXSZuhdALTjKvnxMtj9oXVQ%3d&risl=&pid=ImgRaw&r=0');
+               height: 300px;"></div>
+         <!-- Background image -->
+      
+         <div class="card mx-4 mx-md-5 shadow-5-strong" style="
+               margin-top: -100px;
+               background: hsla(0, 0%, 100%, 0.8);
+               backdrop-filter: blur(30px);
+               ">
+         <div class="card-body py-5 px-md-5">
+      
+            <div class="row d-flex justify-content-center">
+               <div style="display: flex; align-items:center; justify-content:center; margin-bottom: 20px">
+                  <img src="https://www.freeiconspng.com/thumbs/book-icon/book-stack-icon--icon-search-engine-16.png" alt="" width="45" height="36" class="d-inline-block align-text-top">
+                  <span class="h1 fw-bold mb-0" style="margin-left: 3px;">Textbooks For Sale</span>
+               </div>
+
+               <div class="col-lg-8">
+               <h2 class="fw-bold mb-5">Sign In</h2> 
+      
+                  <!-- Submit button -->
+                  <div class="pt-1 mb-6" style="margin: 15px;">
+                     <!--<a href = "https://textbooksforsale.herokuapp.com/accounts/google/login/?process=login" ><button class="btn btn-dark btn-lg btn-block" style="background-color: #0c4767; min-width:300px;" type="button">Continue with Google</button></a>-->
+                     <a href = "{% provider_login_url 'google' %}" ><button class="btn btn-dark btn-lg btn-block" style="background-color: #0c4767; min-width:300px;" type="button">Continue with Google</button></a>
+                  </div>
+                  <!-- <div class="pt-1 mb-6" style="margin: 20px;"> -->
+                     <!--<a href = "https://textbooksforsale.herokuapp.com/accounts/login/" ><button class="btn btn-dark btn-lg btn-block" style="background-color: #0c4767; min-width:300px;" type="button">Continue with Email</button></a>-->
+                      <!-- <a href = "{% provider_login_url 'google' %}" ><button class="btn btn-dark btn-lg btn-block" style="background-color: #0c4767; min-width:300px;" type="button">Continue with Email</button></a> -->
+                  <!-- </div> -->
+                  
+                  <!-- <h5>or</h5> -->
+
+                  <!-- <div class="pt-1 mb-6" style="margin: 20px;"> -->
+                     <!--<a href = "https://textbooksforsale.herokuapp.com/accounts/signup/" ><button class="btn btn-dark btn-lg btn-block" style="background-color: #2c8ab4; min-width:300px;" type="button">Sign Up</button></a>-->
+                     <!-- <a href = "{% provider_login_url 'google' %}" ><button class="btn btn-dark btn-lg btn-block" style="background-color: #2c8ab4; min-width:300px;" type="button">Sign Up</button></a> -->
+                  <!-- </div> -->
+               </div>
+            </div>
+         </div>
+         </div>
+      </section>
+
+      {% endif %}
+ <!-- Section: Design Block -->
+
+      
+   </body>
+</html> 

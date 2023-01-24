@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+
+{# Load the tag library #}
+{% load bootstrap5 %}
+{% load static %}
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+<html>
+<head>
+  <title>{{Book.title}}</title>
+  <link rel="icon" type="image/x-icon" href="https://www.freeiconspng.com/thumbs/book-icon/book-stack-icon--icon-search-engine-16.png">
+
+</head>
+<body>
+  <style>
+    body {
+      background-color:#FCF9F7;
+  }
+  .navbar-brand:hover, .nav-link:hover, .dropdown-item:hover {
+  opacity: 0.8;
+
+  }
+  </style>
+         <!-- Navbar  -->
+         <nav class="navbar navbar-dark sticky-top" style="background-color: #6db8d2;">
+          <div class="container-fluid" style="display:flex;">
+            <a class="navbar-brand" style="font-size:25px;" href="{% url 'mainView' %}">
+              <img src="https://www.freeiconspng.com/thumbs/book-icon/book-stack-icon--icon-search-engine-16.png" alt="" width="45" height="36" class="d-inline-block align-text-top">
+              Textbooks For Sale
+            </a>
+            <nav class="nav" style="display:flex; align-items:center; justify-content:center;">
+                <a class="nav-link" style="color:white; font-size:20px;" href="{% url 'searchView' %}">Search</a>
+              <!-- <a class="nav-link" style="color:white; font-size:20px;" href="{% url 'allbooks' %}">All Listings</a> -->
+              <a class="nav-link" style="color:white; font-size:20px;" href="{% url 'department_list' %}">Classes</a>
+              <a class="nav-link" style="color:white; font-size:20px;" href="{% url 'SubmissionView' %}">Sell</a>
+              <div class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="{% url 'accountView' %}" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  <img src="{{ user.socialaccount_set.all.0.get_avatar_url }}" style="border-radius: 50%; max-width: 45px; max-height: 45px;">
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <!--<li><a class="dropdown-item" href="https://textbooksforsale.herokuapp.com/accounts/logout/">Logout</a></li>-->
+                  <li><a class="dropdown-item" href="{% url 'accountView' %}">Account</a></li>
+                  <!-- <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li> -->
+                  <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#exampleModal">Logout</a></li>
+                </ul>
+               </div>
+             </nav>
+
+          </div>
+        </nav>
+        <!-- Navbar -->
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal-dialog" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title" id="exampleModalLabel" style="font-size:30px;">Confirm Logout</h5>
+      <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body" style="font-size:24px;">
+      Are you sure you want to log out?
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="font-size:20px;">Cancel</button>
+      <form action="{% url 'logout' %}">
+      <button type="submit" class="btn btn-primary" style="font-size:20px;">Logout</button>
+      </form>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+var myModal = document.getElementById('myModal')
+var myInput = document.getElementById('myInput')
+
+myModal.addEventListener('shown.bs.modal', function () {
+  myInput.focus()
+})
+</script>
+
+
+  <div style="display:flex; flex-align:center; justify-content:center; margin:50px;">
+    <div class="col-lg-4" style="max-width:300px;  margin-right:20px;">
+      <div class="card mb-4">
+        <div class="card-body text-center" style="min-height:427px;">
+          <h2 style="margin:10px;">Seller</h2>
+          <img
+            src="https://static.vecteezy.com/system/resources/previews/005/502/069/non_2x/illustration-cute-cartoon-animal-rabbit-with-scarf-logo-icon-vector.jpg"
+            alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
+          <h5 style="margin:10px; margin-bottom:20px;">{{Book.seller}}</h5>
+          <div class="d-flex justify-content-center margin:20px;">
+            {%if Book.seller != user.username %}
+            <form style="display: inline-block; ;" action="{% url 'requestFriend' %}" method="post">
+              {% csrf_token %}
+              <button name="friend" class="btn" value="{{ Book.seller }}" type="submit">Add
+                Friend</button>
+            </form>
+            {% endif %}
+          </div>
+          <div style="margin:20px;">
+            <form id="post-form" method="POST" action="{% url 'chat:checkview' %}">
+              {% csrf_token %}
+              <input type="hidden" name="room_name" id="room_name" width="100px" value="{{ Book.title }}" />
+              <input type="hidden" name="username" id="username" width="100px" value="{{ user.username }}" />
+              <input type="submit" class="btn2 " value="Message">
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  <div class="card mb-3" style="min-width: 800px; max-height: 428px;">
+    <div class="row g-0">
+      <div class="col-md-4">
+        {% if Book.pk|divisibleby:9 %}
+        <img src="https://media.istockphoto.com/id/1077215560/vector/isometric-book-icon-in-flat-design-style.jpg?s=612x612&w=0&k=20&c=3HrjcKK-rKTjZ5cn81fWdBKySkP4-QXb2x9_D6O_dyw="
+        alt="Book"
+        class="img-fluid rounded-start"
+        style="min-height:427px;"
+        />
+        {% elif Book.pk|divisibleby:7 %}
+        <img
+        src="https://media.istockphoto.com/id/1019517774/vector/book-color-icon-on-blue-book-for-reading-and-studying-at-school.jpg?s=612x612&w=0&k=20&c=jnSKNROqE5ro5cKQUieolnoa7yB-jK0TQuNQcAL9Y1w="
+        alt="Book"
+        class="img-fluid rounded-start"
+        style="min-height:427px;"
+        />
+        {% elif Book.pk|divisibleby:6 %}
+        <img
+        src="https://media.istockphoto.com/id/546772166/vector/open-book-icon.jpg?s=612x612&w=0&k=20&c=6XqXy9NSO5-9ZOUeT7fWRBRdsGwGMPIjrwduTYvfLXc="
+        alt="Book"
+        class="img-fluid rounded-start"
+        style="min-height:427px;"
+        />
+        {% elif Book.pk|divisibleby:5 %}
+        <img
+        src="https://media.istockphoto.com/id/960184330/vector/open-green-book-flat-design.jpg?s=612x612&w=0&k=20&c=B-1Zh7YfegftUo7mp-aUSnGpjsjWAZunqQK8i_rcQWc="
+        alt="Book"
+        class="img-fluid rounded-start"
+        style="min-height:427px;"
+        />
+        {% elif Book.pk|divisibleby:4 %}
+        <img
+        src="https://media.istockphoto.com/id/1144204165/vector/open-book-icon-in-flat-style-literature-vector-illustration-on-isolated-background-library.jpg?s=612x612&w=0&k=20&c=Bvs3P5rFspHINJmLXgVl7c8U-YBg6Cv3jFTPUispF5A="
+        alt="Book"
+        class="img-fluid rounded-start"
+        style="min-height:427px;"
+        />
+        {% elif Book.pk|divisibleby:3 %}
+        <img
+        src="https://media.istockphoto.com/id/1267515978/vector/open-book-isometric-flat-design-vector-illustration.jpg?s=612x612&w=0&k=20&c=DE9HjAGw7ClVUEHY8ZnUIYJZzcYOCRoTXe5nIL9IJXc="
+        alt="Book"
+        class="img-fluid rounded-start"
+        style="min-height:427px;"
+        />
+        {% elif Book.pk|divisibleby:2 %}
+        <img
+        src="https://media.istockphoto.com/id/1152677695/vector/book-flat-design-style-on-blue-background-education-vector-illustration.jpg?s=612x612&w=0&k=20&c=x-ciX-Zigt8CZKzpRt-PVGpK3n66raEVMTDG1CaT19A="
+        alt="Book"
+        class="img-fluid rounded-start"
+        style="min-height:427px;"
+        />
+        {% else %}
+        <img
+        src="https://media.istockphoto.com/id/1415602825/vector/open-empty-book-purple-pink-icon-isolated-on-blue-vector-illustration.jpg?s=612x612&w=0&k=20&c=XjyD_WBBScY9cpnLYM1XkfkHV53o01x7F6BcMaYtz5M="
+        alt="Book"
+        class="img-fluid rounded-start"
+        style="min-height:427px;"
+        />
+        {% endif %}
+      </div>
+      <div class="col-md-8">
+        <div class="card-body" style="margin:20px;">
+          <h1>{{Book.title}}</h1>
+          <h2>By {{Book.author}}</h2>
+          <br>
+        <div style="display:flex; margin-top:20px; background-color:white; border:none;" class="card-footer">
+          <div style="text-align:center; margin-top:30px; margin-right:10px;">
+            <h1>${{Book.price}}</h1>
+            {% if Book.condition == "New" %}
+            <h5 class="text-success" style="margin:20px;">{{Book.condition}}</h5>
+            {% elif Book.condition == "Very Good" %}
+            <h5 class="text-primary" style="margin:20px;">{{Book.condition}}</h5>
+            {% elif Book.condition == "Good" %}
+            <h5 class="text-info" style="margin:20px;">{{Book.condition}}</h5>
+            {% elif Book.condition == "Fair" %}
+            <h5 class="text-warning" style="margin:20px;">{{Book.condition}}</h5>
+            {% else %}
+            <h5 class="text-danger" style="margin:20px;">{{Book.condition}}</h5>
+            {% endif %}
+            <div class="d-flex flex-column mt-4">
+              <form style="display: inline-block; ;" action="{% url 'addFavorite' %}" method="post">
+                {% csrf_token %}
+                <button name="book" class="btn" value="{{ Book.pk }}" type="submit">Favorite</button>
+              </form>
+            </div>
+          </div>
+
+          <div class="border-sm-start-none border-start" style="margin-left:20px; margin-top:30px;">
+            <div style="margin-left:20px;">
+              <h5 style="margin:15px;">ISBN: <span class="text-muted">{{Book.ISBN}}</span></h5>
+              <h5 style="margin:15px;">Course: <span class="text-muted">{{Book.course}}</span></h5>
+              <h5 style="margin:15px;">Instructor: <span class="text-muted">{{Book.instructor}}</span></h5>
+            </div>
+          </div>
+
+          <style>
+            .btn {
+              min-height:40px; 
+              font-size:16px; 
+              color:black; 
+              border-radius:5px; 
+              background-color: #60E4FF; 
+              width:105px;
+              border:0;
+            }
+            .btn:hover {
+              color:black; 
+              background-color:#54cde5;
+            }
+          
+            .btn2 {
+              min-height:40px; 
+              font-size:16px; 
+              color:black; 
+              border-radius:5px; 
+              border:0;
+              min-width:105px;
+              background-color:#44B5CE;
+            }
+          
+            .btn2:hover {
+              color:black; 
+              background-color:#277295;
+            }
+          </style>  
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+<!-- Footer -->
+<footer class="text-center text-lg-start bg-light text-muted fixed-bottom">
+  <!-- Copyright -->
+  <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">
+    © 2022 Copyright: B-17
+  </div>
+  <!-- Copyright -->
+</footer>
+<!-- Footer -->
+    
+</body>
+
+
+</html>

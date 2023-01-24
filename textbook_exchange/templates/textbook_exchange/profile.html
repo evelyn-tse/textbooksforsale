@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+
+{# Load the tag library #}
+{% load bootstrap5 %}
+{% load static %}
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+<html>
+<head>
+  <title>Account</title>
+  <link rel="icon" type="image/x-icon" href="https://www.freeiconspng.com/thumbs/book-icon/book-stack-icon--icon-search-engine-16.png">
+
+</head>
+<body>
+  <style>
+    body {
+      background-color:#FCF9F7;
+  }
+  a:hover {
+  opacity: 0.8;
+}
+  .testimonial-card .card-up {
+height: 120px;
+overflow: hidden;
+border-top-left-radius: 0.25rem;
+border-top-right-radius: 0.25rem;
+}
+
+.testimonial-card .avatar {
+width: 110px;
+margin-top: -60px;
+overflow: hidden;
+border: 3px solid #fff;
+border-radius: 50%;
+}
+  </style>
+
+  <div class="page">
+         <!-- Navbar  -->
+         <nav class="navbar navbar-dark sticky-top" style="background-color: #6db8d2;">
+            <div class="container-fluid" style="display:flex;">
+              <a class="navbar-brand" style="font-size:25px;" href="{% url 'mainView' %}">
+                <img src="https://www.freeiconspng.com/thumbs/book-icon/book-stack-icon--icon-search-engine-16.png" alt="" width="45" height="36" class="d-inline-block align-text-top">
+                Textbooks For Sale
+              </a>
+              <nav class="nav" style="display:flex; align-items:center; justify-content:center;">
+                  <a class="nav-link" style="color:white; font-size:20px;" href="{% url 'searchView' %}">Search</a>
+                <!-- <a class="nav-link" style="color:white; font-size:20px;" href="{% url 'allbooks' %}">All Listings</a> -->
+                <a class="nav-link" style="color:white; font-size:20px;" href="{% url 'department_list' %}">Classes</a>
+                <a class="nav-link" style="color:white; font-size:20px;" href="{% url 'SubmissionView' %}">Sell</a>
+                <div class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="{% url 'accountView' %}" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="{{ user.socialaccount_set.all.0.get_avatar_url }}" style="border-radius: 50%; max-width: 45px; max-height: 45px;">
+                  </a>
+                  <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <!--<li><a class="dropdown-item" href="https://textbooksforsale.herokuapp.com/accounts/logout/">Logout</a></li>-->
+                    <li><a class="dropdown-item" href="{% url 'accountView' %}">Account</a></li>
+                    <!-- <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li> -->
+                    <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#exampleModal">Logout</a></li>
+                  </ul>
+                 </div>
+               </nav>
+
+            </div>
+          </nav>
+          <!-- Navbar -->
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel" style="font-size:30px;">Confirm Logout</h5>
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" style="font-size:24px;">
+        Are you sure you want to log out?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="font-size:20px;">Cancel</button>
+        <form action="{% url 'logout' %}">
+        <button type="submit" class="btn btn-primary" style="font-size:20px;">Logout</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  var myModal = document.getElementById('myModal')
+  var myInput = document.getElementById('myInput')
+  
+  myModal.addEventListener('shown.bs.modal', function () {
+    myInput.focus()
+  })
+
+</script>
+
+<!-- Modal-->
+          <!-- Top Cards -->
+
+              <div class="row" style="margin-left:50px; margin-right:50px; margin-top:50px;">
+                <div class="col-lg-4">
+
+              <div class=" text-center">
+                  <div class="card testimonial-card">
+                    <div class="card-up" style="background-color: #0c4767;"></div>
+                    <div class="avatar mx-auto bg-white">
+                      <img src="{{ user.socialaccount_set.all.0.get_avatar_url }}"
+                        class="rounded-circle img-fluid" style="margin-top:4px;"/>
+                    </div>
+                    <div class="card-body">
+                      <h3 class="mb-4">{{user.first_name}} {{user.last_name}}</h3>
+                      <hr />
+                      <div class="d-flex justify-content-center text-center py-1">
+                        <div>
+                          <p class="mb-1 h5">{{books|length}}</p>
+                          <p class="small text-muted mb-0">Listings</p>
+                        </div>
+                        <div class="px-3">
+                          <p class="mb-1 h5">{{favorites.all | length}}</p>
+                          <p class="small text-muted mb-0">Favorites</p>
+                        </div>
+                        <div>
+                          <p class="mb-1 h5">{{friends.all|length}}</p>
+                          <p class="small text-muted mb-0">Friends</p>
+                        </div>
+                      </div>
+                      <div class="d-flex justify-content-center mb-2" style="margin:20px;">
+            
+                        <form action="{% url 'updateprofileview' %}">
+                        <button type="submit" class="btn btn-secondary">Edit Profile</button>
+                        </form>  
+          
+                    </div>
+                    </div>
+                  </div>
+              </div>
+                </div>
+                <div class="col-lg-8">
+                  <div class="card mb-4">
+                        <div class="card-body" style="margin:12px;">
+                          <div style="text-align:center; margin-bottom:10px;">
+                            <h2>About</h2>
+                          </div>
+                        <hr>
+                        <div class="row">
+                          <div class="col-sm-3" style="margin-top:5px; margin-bottom:5px;">
+                            <h5 class="mb-0">Username</h5>
+                          </div>
+                          <div class="col-sm-9" style="margin-top:5px; margin-bottom:5px;">
+                            <p class=" mb-0 text-muted">{{user.username}}</p>
+                          </div>
+                        </div>
+                        <hr>
+                      <div class="row">
+                        <div class="col-sm-3" style="margin-top:5px; margin-bottom:5px;">
+                          <h5 class="mb-0">First Name</h5>
+                        </div>
+                        <div class="col-sm-9" style="margin-top:5px; margin-bottom:5px;">
+                          <p class=" mb-0 text-muted">{{user.first_name}}</p>
+                        </div>
+                      </div>
+                      <hr>
+                      <div class="row">
+                        <div class="col-sm-3" style="margin-top:5px; margin-bottom:5px;">
+                          <h5 class="mb-0">Last Name</h5>
+                        </div>
+                        <div class="col-sm-9" style="margin-top:5px; margin-bottom:5px;">
+                          <p class=" mb-0 text-muted">{{user.last_name}}</p>
+                        </div>
+                      </div>
+                      <hr>
+                     
+                      <div class="row">
+                        <div class="col-sm-3" style="margin-top:5px; margin-bottom:5px;">
+                          <h5 class="mb-0 ">Email</h5>
+                        </div>
+                        <div class="col-sm-9" style="margin-top:5px; margin-bottom:5px;">
+                          <p class=" mb-0 text-muted">{{user.email}}</p>
+                        </div>
+                      </div>
+                      <hr>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+              <!-- Top Cards -->
+
+<!-- Accordian -->
+<div class="row" style="margin-left:50px; margin-right:50px; margin-bottom:50px;">
+  <div class="accordion " id="accordionExample">
+    <div class="accordion-item"  >
+      <h2 class="accordion-header" id="headingOne" >
+        <button style="font-size:25px;" class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+          My Listings
+        </button>
+      </h2>
+      <div  id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+        <div class="accordion-body" >
+          {% if  books %}
+          <!-- textbooks -->
+            <div class = "" style="margin:50px;">
+            <div class="row row-cols-1 row-cols-md-3 g-4">
+            {% for book in books %}
+            <div class="col">
+            <div class="card h-100" >
+            {% if book.pk|divisibleby:9 %}
+            <div class="card-img-top" style="background-color:#b6ddfa">
+              <img id={{book.pk}} src="https://media.istockphoto.com/id/1077215560/vector/isometric-book-icon-in-flat-design-style.jpg?s=612x612&w=0&k=20&c=3HrjcKK-rKTjZ5cn81fWdBKySkP4-QXb2x9_D6O_dyw=" style="max-height: 190px;" class="card-img-top"
+                alt="Book" />
+                {% if book.condition == "New" %}
+                <h5><span class="badge bg-success ms-2">{{book.condition}}</span></h5>
+                {% elif book.condition == "Very Good" %}
+                <h5><span class="badge bg-primary ms-2" >{{book.condition}}</span></h5>
+                {% elif book.condition == "Good" %}
+                  <h5><span class="badge bg-info ms-2">{{book.condition}}</span></h5>
+                {% elif book.condition == "Fair" %}
+                <h5><span class="badge bg-warning ms-2">{{book.condition}}</span></h5>
+                {% else %}
+                <h5><span class="badge bg-danger ms-2">{{book.condition}}</span></h5>
+                {% endif %}
+            </div>
+            {% elif book.pk|divisibleby:7 %}
+            <div class="card-img-top" style="background-color:#00acc2">
+              <img id={{book.pk}} src="https://media.istockphoto.com/id/1019517774/vector/book-color-icon-on-blue-book-for-reading-and-studying-at-school.jpg?s=612x612&w=0&k=20&c=jnSKNROqE5ro5cKQUieolnoa7yB-jK0TQuNQcAL9Y1w=" style="max-height: 190px;" class="card-img-top"
+                alt="Book" />
+                {% if book.condition == "New" %}
+                <h5><span class="badge bg-success ms-2">{{book.condition}}</span></h5>
+                {% elif book.condition == "Very Good" %}
+                <h5><span class="badge bg-primary ms-2" >{{book.condition}}</span></h5>
+                {% elif book.condition == "Good" %}
+                  <h5><span class="badge bg-info ms-2">{{book.condition}}</span></h5>
+                {% elif book.condition == "Fair" %}
+                <h5><span class="badge bg-warning ms-2">{{book.condition}}</span></h5>
+                {% else %}
+                <h5><span class="badge bg-danger ms-2">{{book.condition}}</span></h5>
+                {% endif %}
+            </div>
+            {% elif book.pk|divisibleby:6 %}
+            <div class="card-img-top" style="background-color:#64c5bc">
+              <img id={{book.pk}} src="https://media.istockphoto.com/id/546772166/vector/open-book-icon.jpg?s=612x612&w=0&k=20&c=6XqXy9NSO5-9ZOUeT7fWRBRdsGwGMPIjrwduTYvfLXc=" style="max-height: 190px;" class="card-img-top"
+                alt="Book" />
+                {% if book.condition == "New" %}
+                <h5><span class="badge bg-success ms-2">{{book.condition}}</span></h5>
+                {% elif book.condition == "Very Good" %}
+                <h5><span class="badge bg-primary ms-2" >{{book.condition}}</span></h5>
+                {% elif book.condition == "Good" %}
+                  <h5><span class="badge bg-info ms-2">{{book.condition}}</span></h5>
+                {% elif book.condition == "Fair" %}
+                <h5><span class="badge bg-warning ms-2">{{book.condition}}</span></h5>
+                {% else %}
+                <h5><span class="badge bg-danger ms-2">{{book.condition}}</span></h5>
+                {% endif %}
+            </div>
+            {% elif book.pk|divisibleby:5 %}
+            <div class="card-img-top" style="background-color:#badbc8">
+              <img id={{book.pk}} src="https://media.istockphoto.com/id/960184330/vector/open-green-book-flat-design.jpg?s=612x612&w=0&k=20&c=B-1Zh7YfegftUo7mp-aUSnGpjsjWAZunqQK8i_rcQWc=" style="max-height: 190px;" class="card-img-top"
+                alt="Book" />
+                {% if book.condition == "New" %}
+                <h5><span class="badge bg-success ms-2">{{book.condition}}</span></h5>
+                {% elif book.condition == "Very Good" %}
+                <h5><span class="badge bg-primary ms-2" >{{book.condition}}</span></h5>
+                {% elif book.condition == "Good" %}
+                  <h5><span class="badge bg-info ms-2">{{book.condition}}</span></h5>
+                {% elif book.condition == "Fair" %}
+                <h5><span class="badge bg-warning ms-2">{{book.condition}}</span></h5>
+                {% else %}
+                <h5><span class="badge bg-danger ms-2">{{book.condition}}</span></h5>
+                {% endif %}
+            </div>
+            {% elif book.pk|divisibleby:4 %}
+            <div class="card-img-top" style="background-color:#30c1be">
+              <img id={{book.pk}} src="https://media.istockphoto.com/id/1144204165/vector/open-book-icon-in-flat-style-literature-vector-illustration-on-isolated-background-library.jpg?s=612x612&w=0&k=20&c=Bvs3P5rFspHINJmLXgVl7c8U-YBg6Cv3jFTPUispF5A=" style="max-height: 190px;" class="card-img-top"
+                alt="Book" />
+                {% if book.condition == "New" %}
+                <h5><span class="badge bg-success ms-2">{{book.condition}}</span></h5>
+                {% elif book.condition == "Very Good" %}
+                <h5><span class="badge bg-primary ms-2" >{{book.condition}}</span></h5>
+                {% elif book.condition == "Good" %}
+                  <h5><span class="badge bg-info ms-2">{{book.condition}}</span></h5>
+                {% elif book.condition == "Fair" %}
+                <h5><span class="badge bg-warning ms-2">{{book.condition}}</span></h5>
+                {% else %}
+                <h5><span class="badge bg-danger ms-2">{{book.condition}}</span></h5>
+                {% endif %}
+            </div>
+            {% elif book.pk|divisibleby:3 %}
+            <div class="card-img-top" style="background-color:#7cc5b1">
+              <img id={{book.pk}} src="https://media.istockphoto.com/id/1267515978/vector/open-book-isometric-flat-design-vector-illustration.jpg?s=612x612&w=0&k=20&c=DE9HjAGw7ClVUEHY8ZnUIYJZzcYOCRoTXe5nIL9IJXc=" style="max-height: 190px;" class="card-img-top"
+                alt="Book" />
+                {% if book.condition == "New" %}
+                <h5><span class="badge bg-success ms-2">{{book.condition}}</span></h5>
+                {% elif book.condition == "Very Good" %}
+                <h5><span class="badge bg-primary ms-2" >{{book.condition}}</span></h5>
+                {% elif book.condition == "Good" %}
+                  <h5><span class="badge bg-info ms-2">{{book.condition}}</span></h5>
+                {% elif book.condition == "Fair" %}
+                <h5><span class="badge bg-warning ms-2">{{book.condition}}</span></h5>
+                {% else %}
+                <h5><span class="badge bg-danger ms-2">{{book.condition}}</span></h5>
+                {% endif %}
+            </div>
+            {% elif book.pk|divisibleby:2 %}
+            <div class="card-img-top" style="background-color:#b6c7f5">
+              <img id={{book.pk}} src="https://media.istockphoto.com/id/1152677695/vector/book-flat-design-style-on-blue-background-education-vector-illustration.jpg?s=612x612&w=0&k=20&c=x-ciX-Zigt8CZKzpRt-PVGpK3n66raEVMTDG1CaT19A=" style="max-height: 190px;" class="card-img-top"
+                alt="Book" />
+                {% if book.condition == "New" %}
+                <h5><span class="badge bg-success ms-2">{{book.condition}}</span></h5>
+                {% elif book.condition == "Very Good" %}
+                <h5><span class="badge bg-primary ms-2" >{{book.condition}}</span></h5>
+                {% elif book.condition == "Good" %}
+                  <h5><span class="badge bg-info ms-2">{{book.condition}}</span></h5>
+                {% elif book.condition == "Fair" %}
+                <h5><span class="badge bg-warning ms-2">{{book.condition}}</span></h5>
+                {% else %}
+                <h5><span class="badge bg-danger ms-2">{{book.condition}}</span></h5>
+                {% endif %}
+            </div>
+            {% else %}
+            <div class="card-img-top" style="background-color:#4f8e97">
+              <img id={{book.pk}} src="https://media.istockphoto.com/id/1415602825/vector/open-empty-book-purple-pink-icon-isolated-on-blue-vector-illustration.jpg?s=612x612&w=0&k=20&c=XjyD_WBBScY9cpnLYM1XkfkHV53o01x7F6BcMaYtz5M=" style="max-height: 190px;" class="card-img-top"
+                alt="Book" />
+                {% if book.condition == "New" %}
+                <h5><span class="badge bg-success ms-2">{{book.condition}}</span></h5>
+                {% elif book.condition == "Very Good" %}
+                <h5><span class="badge bg-primary ms-2" >{{book.condition}}</span></h5>
+                {% elif book.condition == "Good" %}
+                  <h5><span class="badge bg-info ms-2">{{book.condition}}</span></h5>
+                {% elif book.condition == "Fair" %}
+                <h5><span class="badge bg-warning ms-2">{{book.condition}}</span></h5>
+                {% else %}
+                <h5><span class="badge bg-danger ms-2">{{book.condition}}</span></h5>
+                {% endif %}
+            </div>
+            {% endif %}
+            <a href = "/textbook/details/{{   book.pk     }}/" style="text-decoration: none; color:black;">
+            <div class="card-body" style="text-align:center;">
+              <h4 class="card-title" >{{book.title}}</h4>
+              <p class="card-text">By {{book.author}}</p>
+            </div>
+            <div class="card-footer" style="border:none; background-color:white;">
+              <h4 style="text-align: center; ">${{book.price}}</h4>
+            </div>
+            </a>
+            <div style="display: inline-block; text-align:center; margin-bottom:15px;">
+              
+              <!-- <form action="{% url 'removeListing' %}" method="post">
+                {% csrf_token %}
+                <button name="book" style="font-size:20px;" class="btn btn-danger" value="{{ book.pk }}" type="submit">Remove Listing</button>
+              </form> -->
+              <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#staticModal{{book.pk}}">Remove Listing</button>
+            </div>
+            </div>
+            </div>
+
+                <!-- Modal -->
+                <div class="modal fade" id="staticModal{{book.pk}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel" style="font-size:30px;">Confirm Remove Listing</h5>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body" style="font-size:24px;">
+                        Are you sure you want to remove this listing? This action can't be undone.
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="font-size:20px;">Cancel</button>
+                    <form action="{% url 'removeListing' %}" method="post">
+                      {% csrf_token %}
+                      <button name="book" style="font-size:20px;" class="btn btn-danger" value="{{ book.pk }}" type="submit">Remove Listing</button>
+                    </form>
+                  </div>
+                    </div>
+                  </div>
+                </div>
+
+
+            {% endfor %}  
+            </div>
+            {% else %}
+              <p style="font-size:20px;">You have no listings.</p>
+            {% endif %}
+            <!-- textbooks -->
+        </div>
+      </div>
+    </div>
+    <div class="accordion-item"  >
+      <h2 class="accordion-header" id="headingTwo">
+        <button style="font-size:25px;" class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+          My Favorites
+        </button>
+      </h2>
+      <div  id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+        <div class="accordion-body">
+
+          {% if  favorites.all %}
+          <!-- textbooks -->
+          <div class = "" style="margin:50px;">
+          <div class="row row-cols-1 row-cols-md-3 g-4">
+          {% for book in favorites.all %}
+          <a href = "/textbook/details/{{   book.pk     }}/" style="text-decoration: none; color:black;">
+          <div class="col">
+          <div class="card h-100" >
+          {% if book.pk|divisibleby:9 %}
+          <div class="card-img-top" style="background-color:#b6ddfa">
+          <img id={{book.pk}} src="https://media.istockphoto.com/id/1077215560/vector/isometric-book-icon-in-flat-design-style.jpg?s=612x612&w=0&k=20&c=3HrjcKK-rKTjZ5cn81fWdBKySkP4-QXb2x9_D6O_dyw=" style="max-height: 190px;" class="card-img-top"
+            alt="Book" />
+            {% if book.condition == "New" %}
+            <h5><span class="badge bg-success ms-2">{{book.condition}}</span></h5>
+            {% elif book.condition == "Very Good" %}
+            <h5><span class="badge bg-primary ms-2" >{{book.condition}}</span></h5>
+            {% elif book.condition == "Good" %}
+              <h5><span class="badge bg-info ms-2">{{book.condition}}</span></h5>
+            {% elif book.condition == "Fair" %}
+            <h5><span class="badge bg-warning ms-2">{{book.condition}}</span></h5>
+            {% else %}
+            <h5><span class="badge bg-danger ms-2">{{book.condition}}</span></h5>
+            {% endif %}
+          </div>
+          {% elif book.pk|divisibleby:7 %}
+          <div class="card-img-top" style="background-color:#00acc2">
+          <img id={{book.pk}} src="https://media.istockphoto.com/id/1019517774/vector/book-color-icon-on-blue-book-for-reading-and-studying-at-school.jpg?s=612x612&w=0&k=20&c=jnSKNROqE5ro5cKQUieolnoa7yB-jK0TQuNQcAL9Y1w=" style="max-height: 190px;" class="card-img-top"
+            alt="Book" />
+            {% if book.condition == "New" %}
+            <h5><span class="badge bg-success ms-2">{{book.condition}}</span></h5>
+            {% elif book.condition == "Very Good" %}
+            <h5><span class="badge bg-primary ms-2" >{{book.condition}}</span></h5>
+            {% elif book.condition == "Good" %}
+              <h5><span class="badge bg-info ms-2">{{book.condition}}</span></h5>
+            {% elif book.condition == "Fair" %}
+            <h5><span class="badge bg-warning ms-2">{{book.condition}}</span></h5>
+            {% else %}
+            <h5><span class="badge bg-danger ms-2">{{book.condition}}</span></h5>
+            {% endif %}
+          </div>
+          {% elif book.pk|divisibleby:6 %}
+          <div class="card-img-top" style="background-color:#64c5bc">
+          <img id={{book.pk}} src="https://media.istockphoto.com/id/546772166/vector/open-book-icon.jpg?s=612x612&w=0&k=20&c=6XqXy9NSO5-9ZOUeT7fWRBRdsGwGMPIjrwduTYvfLXc=" style="max-height: 190px;" class="card-img-top"
+            alt="Book" />
+            {% if book.condition == "New" %}
+            <h5><span class="badge bg-success ms-2">{{book.condition}}</span></h5>
+            {% elif book.condition == "Very Good" %}
+            <h5><span class="badge bg-primary ms-2" >{{book.condition}}</span></h5>
+            {% elif book.condition == "Good" %}
+              <h5><span class="badge bg-info ms-2">{{book.condition}}</span></h5>
+            {% elif book.condition == "Fair" %}
+            <h5><span class="badge bg-warning ms-2">{{book.condition}}</span></h5>
+            {% else %}
+            <h5><span class="badge bg-danger ms-2">{{book.condition}}</span></h5>
+            {% endif %}
+          </div>
+          {% elif book.pk|divisibleby:5 %}
+          <div class="card-img-top" style="background-color:#badbc8">
+          <img id={{book.pk}} src="https://media.istockphoto.com/id/960184330/vector/open-green-book-flat-design.jpg?s=612x612&w=0&k=20&c=B-1Zh7YfegftUo7mp-aUSnGpjsjWAZunqQK8i_rcQWc=" style="max-height: 190px;" class="card-img-top"
+            alt="Book" />
+            {% if book.condition == "New" %}
+            <h5><span class="badge bg-success ms-2">{{book.condition}}</span></h5>
+            {% elif book.condition == "Very Good" %}
+            <h5><span class="badge bg-primary ms-2" >{{book.condition}}</span></h5>
+            {% elif book.condition == "Good" %}
+              <h5><span class="badge bg-info ms-2">{{book.condition}}</span></h5>
+            {% elif book.condition == "Fair" %}
+            <h5><span class="badge bg-warning ms-2">{{book.condition}}</span></h5>
+            {% else %}
+            <h5><span class="badge bg-danger ms-2">{{book.condition}}</span></h5>
+            {% endif %}
+          </div>
+          {% elif book.pk|divisibleby:4 %}
+          <div class="card-img-top" style="background-color:#30c1be">
+          <img id={{book.pk}} src="https://media.istockphoto.com/id/1144204165/vector/open-book-icon-in-flat-style-literature-vector-illustration-on-isolated-background-library.jpg?s=612x612&w=0&k=20&c=Bvs3P5rFspHINJmLXgVl7c8U-YBg6Cv3jFTPUispF5A=" style="max-height: 190px;" class="card-img-top"
+            alt="Book" />
+            {% if book.condition == "New" %}
+            <h5><span class="badge bg-success ms-2">{{book.condition}}</span></h5>
+            {% elif book.condition == "Very Good" %}
+            <h5><span class="badge bg-primary ms-2" >{{book.condition}}</span></h5>
+            {% elif book.condition == "Good" %}
+              <h5><span class="badge bg-info ms-2">{{book.condition}}</span></h5>
+            {% elif book.condition == "Fair" %}
+            <h5><span class="badge bg-warning ms-2">{{book.condition}}</span></h5>
+            {% else %}
+            <h5><span class="badge bg-danger ms-2">{{book.condition}}</span></h5>
+            {% endif %}
+          </div>
+          {% elif book.pk|divisibleby:3 %}
+          <div class="card-img-top" style="background-color:#7cc5b1">
+          <img id={{book.pk}} src="https://media.istockphoto.com/id/1267515978/vector/open-book-isometric-flat-design-vector-illustration.jpg?s=612x612&w=0&k=20&c=DE9HjAGw7ClVUEHY8ZnUIYJZzcYOCRoTXe5nIL9IJXc=" style="max-height: 190px;" class="card-img-top"
+            alt="Book" />
+            {% if book.condition == "New" %}
+            <h5><span class="badge bg-success ms-2">{{book.condition}}</span></h5>
+            {% elif book.condition == "Very Good" %}
+            <h5><span class="badge bg-primary ms-2" >{{book.condition}}</span></h5>
+            {% elif book.condition == "Good" %}
+              <h5><span class="badge bg-info ms-2">{{book.condition}}</span></h5>
+            {% elif book.condition == "Fair" %}
+            <h5><span class="badge bg-warning ms-2">{{book.condition}}</span></h5>
+            {% else %}
+            <h5><span class="badge bg-danger ms-2">{{book.condition}}</span></h5>
+            {% endif %}
+          </div>
+          {% elif book.pk|divisibleby:2 %}
+          <div class="card-img-top" style="background-color:#b6c7f5">
+          <img id={{book.pk}} src="https://media.istockphoto.com/id/1152677695/vector/book-flat-design-style-on-blue-background-education-vector-illustration.jpg?s=612x612&w=0&k=20&c=x-ciX-Zigt8CZKzpRt-PVGpK3n66raEVMTDG1CaT19A=" style="max-height: 190px;" class="card-img-top"
+            alt="Book" />
+            {% if book.condition == "New" %}
+            <h5><span class="badge bg-success ms-2">{{book.condition}}</span></h5>
+            {% elif book.condition == "Very Good" %}
+            <h5><span class="badge bg-primary ms-2" >{{book.condition}}</span></h5>
+            {% elif book.condition == "Good" %}
+              <h5><span class="badge bg-info ms-2">{{book.condition}}</span></h5>
+            {% elif book.condition == "Fair" %}
+            <h5><span class="badge bg-warning ms-2">{{book.condition}}</span></h5>
+            {% else %}
+            <h5><span class="badge bg-danger ms-2">{{book.condition}}</span></h5>
+            {% endif %}
+          </div>
+          {% else %}
+          <div class="card-img-top" style="background-color:#4f8e97">
+          <img id={{book.pk}} src="https://media.istockphoto.com/id/1415602825/vector/open-empty-book-purple-pink-icon-isolated-on-blue-vector-illustration.jpg?s=612x612&w=0&k=20&c=XjyD_WBBScY9cpnLYM1XkfkHV53o01x7F6BcMaYtz5M=" style="max-height: 190px;" class="card-img-top"
+            alt="Book" />
+            {% if book.condition == "New" %}
+            <h5><span class="badge bg-success ms-2">{{book.condition}}</span></h5>
+            {% elif book.condition == "Very Good" %}
+            <h5><span class="badge bg-primary ms-2" >{{book.condition}}</span></h5>
+            {% elif book.condition == "Good" %}
+              <h5><span class="badge bg-info ms-2">{{book.condition}}</span></h5>
+            {% elif book.condition == "Fair" %}
+            <h5><span class="badge bg-warning ms-2">{{book.condition}}</span></h5>
+            {% else %}
+            <h5><span class="badge bg-danger ms-2">{{book.condition}}</span></h5>
+            {% endif %}
+          </div>
+          {% endif %}
+          <div class="card-body" style="text-align:center;">
+            <h4 class="card-title" >{{book.title}}</h4>
+            <p class="card-text">By {{book.author}}</p>
+          </div>
+          <div class="card-footer" style="border:none; background-color:white;">
+            <h4 style="text-align: center; ">${{book.price}}</h4>
+          </div>
+          <form style="display: inline-block; text-align: center; margin-bottom:10px;" action="{% url 'removeFavorite' %}" method="post">
+          {% csrf_token %}
+          <button name="book" class="btn btn-danger my-1" value="{{ book.pk }}" type="submit">Remove Favorite</button>
+          </form>
+          </div>
+          </div>
+          </a>
+          {% endfor %}  
+          </div>
+          {% else %}
+            <p style="font-size:20px;">You have no favorites.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    <div class="accordion-item"  >
+      <h2 class="accordion-header" id="headingThree" >
+        <button style="font-size:25px;" class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+          My Friends
+        </button>
+      </h2>
+      <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+        <div class="accordion-body" >
+          {% if friends.all %}
+          <div class = "" style="margin:50px;">
+            <div class="row row-cols-1 row-cols-md-3 g-4">
+              {% for friend in friends.all %}
+              <div class="col">
+                  <div class="card testimonial-card text-center">
+                  <div class="card-up" style="background-color: #2c8ab4;"></div>
+                  <div class="avatar mx-auto bg-white">
+                    <img src="{{ friend.socialaccount_set.all.0.get_avatar_url }}"
+                      class="rounded-circle img-fluid" style="margin-top:4px; "/>
+                  </div>
+                  <div class="card-body" style="text-align:center;">
+                    <!-- <img src="{{ friend.socialaccount_set.all.0.get_avatar_url }}"
+                    class="rounded-circle img-fluid" style="margin-top:4px; margin-bottom:10px;"/> -->
+                    <h4 class="mb-4">{{friend.first_name}} {{friend.last_name}}</h4>
+                    <hr />
+                    <p class="mb-0"><strong>{{friend.email}}</strong></p>
+                    <p class="mb-0">Major: {{friend.major}}</p>
+                    <p class="mb-0">Year: {{friend.year}}</p>
+                    <form style="display: inline-block; margin:5px;" action="{% url 'removeFriend' %}" method="post">
+                      {% csrf_token %}
+                      <button name="friend" class="btn btn-danger my-1" value="{{ friend }}" type="submit">Remove Friend</button>
+                    </form>
+                  </div>
+                  </div>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+          {% else %}
+          <p style="font-size:20px;">You have no friends.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- outgoing -->
+
+    <div class="accordion-item"  >
+      <h2 class="accordion-header" id="headingFour" >
+        <button style="font-size:25px;" class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+          Incoming Friend Requests
+        </button>
+      </h2>
+      <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#accordionExample">
+        <div class="accordion-body" >
+          {% if incoming_friend_requests %}
+          <div class = "" style="margin:50px;">
+            <div class="row row-cols-1 row-cols-md-3 g-4">
+              {% for request in incoming_friend_requests %}
+              <div class="col">
+                  <div class="card testimonial-card text-center">
+                  <div class="card-up" style="background-color: #2c8ab4;"></div>
+                  <div class="avatar mx-auto bg-white">
+                    <img src="{{ request.sender.socialaccount_set.all.0.get_avatar_url }}"
+                      class="rounded-circle img-fluid" style="margin-top:4px; "/>
+                  </div>
+                  <div class="card-body" style="text-align:center;">
+                    <!-- <img src="{{ friend.socialaccount_set.all.0.get_avatar_url }}"
+                    class="rounded-circle img-fluid" style="margin-top:4px; margin-bottom:10px;"/> -->
+                    <h4 class="mb-4">{{request.sender}}</h4>
+                    <hr />
+                    <form style="display: inline-block; margin:5px;" action="{% url 'requestFriend' %}" method="post">
+                      {% csrf_token %}
+                      <button name="friend" class="btn btn-success my-1" value="{{ request.sender }}" type="submit">Accept Friend</button>
+                    </form>
+                  </div>
+                  </div>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+          {% else %}
+          <p style="font-size:20px;">You have no incoming requests.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- incoming -->
+    <div class="accordion-item"  >
+      <h2 class="accordion-header" id="headingFive" >
+        <button style="font-size:25px;" class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+          Outgoing Friend Requests
+        </button>
+      </h2>
+      <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#accordionExample">
+        <div class="accordion-body" >
+          {% if outgoing_friend_requests %}
+          <div class = "" style="margin:50px;">
+            <div class="row row-cols-1 row-cols-md-3 g-4">
+              {% for request in outgoing_friend_requests %}
+              <div class="col">
+                  <div class="card testimonial-card text-center">
+                  <div class="card-up" style="background-color: #2c8ab4;"></div>
+                  <div class="avatar mx-auto bg-white">
+                    <img src="{{ request.receiver.socialaccount_set.all.0.get_avatar_url }}"
+                      class="rounded-circle img-fluid" style="margin-top:4px; "/>
+                  </div>
+                  <div class="card-body" style="text-align:center;">
+                    <!-- <img src="{{ friend.socialaccount_set.all.0.get_avatar_url }}"
+                    class="rounded-circle img-fluid" style="margin-top:4px; margin-bottom:10px;"/> -->
+                    <h4 class="mb-4">{{request.receiver}}</h4>
+                    <hr />
+                    <p class="mb-0"><strong>{{friend.email}}</strong></p>
+                    <form style="display: inline-block; margin:5px;" action="{% url 'removeFriendRequest' %}" method="post">
+                      {% csrf_token %}
+                      <button name="friend" class="btn btn-danger my-1" value="{{ request.receiver }}" type="submit">Cancel Request</button>
+                    </form>
+                  </div>
+                  </div>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+          {% else %}
+          <p style="font-size:20px;">You have no sent requests.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+</div>
+</div>
+<!-- Accordian -->
+
+    <!-- Footer -->
+<footer class="text-center text-lg-start bg-light text-muted ">
+  <!-- Copyright -->
+  <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">
+  © 2022 Copyright: B-17
+  </div>
+  <!-- Copyright -->
+</footer>
+<!-- Footer -->      
+
+</body>
+
+
+</html>

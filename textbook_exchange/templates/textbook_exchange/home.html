@@ -1,0 +1,238 @@
+{# Load the tag library #}
+{% load bootstrap5 %}
+{% load static %}
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% load socialaccount %}
+
+<!DOCTYPE html>
+<html>
+
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+      
+   <head>
+      <title>Textbooks For Sale</title>
+      <link rel="icon" type="image/x-icon" href="https://www.freeiconspng.com/thumbs/book-icon/book-stack-icon--icon-search-engine-16.png">
+
+   </head>
+   <body>
+
+      {%for i in response%}
+      {{i.subject}}
+      {%endfor%}
+
+      {% load socialaccount %}
+      {% csrf_token %}
+
+      {% if user.is_authenticated %}
+      <div style="  min-height: 100vh;">
+      <style>
+         body {
+           background-color:#FCF9F7;
+           background-image: url('https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/book-quotes-1531945007.jpg');
+       }
+       a:hover {
+  opacity: 0.8;
+}
+       </style>
+         <!-- Navbar  -->
+         <nav class="navbar navbar-dark sticky-top" style="background-color: #6db8d2;">
+            <div class="container-fluid" style="display:flex;">
+              <a class="navbar-brand" style="font-size:25px;" href="{% url 'mainView' %}">
+                <img src="https://www.freeiconspng.com/thumbs/book-icon/book-stack-icon--icon-search-engine-16.png" alt="" width="45" height="36" class="d-inline-block align-text-top">
+                Textbooks For Sale
+              </a>
+              <nav class="nav" style="display:flex; align-items:center; justify-content:center;">
+                  <a class="nav-link" style="color:white; font-size:20px;" href="{% url 'searchView' %}">Search</a>
+                <!-- <a class="nav-link" style="color:white; font-size:20px;" href="{% url 'allbooks' %}">All Listings</a> -->
+                <a class="nav-link" style="color:white; font-size:20px;" href="{% url 'department_list' %}">Classes</a>
+                <a class="nav-link" style="color:white; font-size:20px;" href="{% url 'SubmissionView' %}">Sell</a>
+                <div class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="{% url 'accountView' %}" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="{{ user.socialaccount_set.all.0.get_avatar_url }}" style="border-radius: 50%; max-width: 45px; max-height: 45px;">
+                  </a>
+                  <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <!--<li><a class="dropdown-item" href="https://textbooksforsale.herokuapp.com/accounts/logout/">Logout</a></li>-->
+                    <li><a class="dropdown-item" href="{% url 'accountView' %}">Account</a></li>
+                    <!-- <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li> -->
+                    <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#exampleModal">Logout</a></li>
+                  </ul>
+                 </div>
+               </nav>
+
+            </div>
+          </nav>
+          <!-- Navbar -->
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel" style="font-size:30px;">Confirm Logout</h5>
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" style="font-size:24px;">
+        Are you sure you want to log out?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="font-size:20px;">Cancel</button>
+        <form action="{% url 'logout' %}">
+        <button type="submit" class="btn btn-primary" style="font-size:20px;">Logout</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  var myModal = document.getElementById('myModal')
+  var myInput = document.getElementById('myInput')
+  
+  myModal.addEventListener('shown.bs.modal', function () {
+    myInput.focus()
+  })
+  </script>
+
+
+      <div class="card text-black" >
+         <div class="card-img-overlay text-center" style="margin-top:125px; margin-left:700px;">
+           <p style="font-size:50px; ">Welcome, {{ user.first_name }}!</p>
+           <p style="font-size:20px;" >Instead of selling your books back to the <br> bookstore, post them here and try to either <br> trade them or sell them to someone else!</p>
+           <div class="pt-1 mb-6" style="margin: 15px;">
+            <form action="{% url 'department_list' %}">
+            <button class="btn" type="submit">Begin Browsing</button>
+          </form>
+           </div>
+           <style>
+            .btn {
+              border:0px; 
+              background-color: #0c4767; 
+              border-radius:5px; 
+              min-width:300px; 
+              min-height:50px; 
+              color:white; 
+              font-size:20px;
+            }
+            .btn:hover {
+              color:white; 
+              background-color:#063750;
+            }
+          </style>  
+         </div>
+         
+      </div>
+
+      <!-- Footer -->
+      <footer class="text-center text-lg-start bg-light text-muted fixed-bottom">
+         <!-- Copyright -->
+         <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">
+         © 2022 Copyright: B-17
+         </div>
+         <!-- Copyright -->
+      </footer>
+      <!-- Footer -->
+      </div>
+      {% else %}
+
+
+   <style>
+      body {
+        background-color:#FCF9F7;;
+      }
+  
+      button:hover{
+         background-color:#6db8d2;
+       }
+
+      body, html {
+        height: 100%;
+      }
+
+  
+      .bg-image {
+        /* The image used */
+        background-image: url("https://wallpaperaccess.com/full/2116674.jpg");
+  
+        /* Add the blur effect */
+        filter: blur(20px);
+        -webkit-filter: blur(20px);
+  
+        /* Full height */
+        height: 100%;
+  
+        /* Center and scale the image nicely */
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+      }
+  
+      /* Position text in the middle of the page/image */
+      .bg-text {
+        background-color: rgb(255, 255, 255); /* Fallback color */
+        background: hsla(0, 0%, 100%, 0.8);
+        backdrop-filter: blur(30px);
+        border-radius: 20px;
+        /* color: black;
+        font-weight: bold; */
+        border: 3px solid #f1f1f1;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 2;
+        width: 80%;
+        padding: 20px;
+        text-align: center;
+      }
+    </style>
+  
+  <div class="bg-image"></div>
+  
+  <div class="bg-text">
+    <div class="row d-flex justify-content-center">
+      <div style="display: flex; align-items:center; justify-content:center; margin-top:20px; margin-bottom: 20px">
+         <img src="https://www.freeiconspng.com/thumbs/book-icon/book-stack-icon--icon-search-engine-16.png" alt="" width="80" height="60" class="d-inline-block align-text-top">
+      </div>
+      <p class="h1 fw-bold mb-0" style="margin-left: 3px; font-size:50px;">Textbooks For Sale</p>
+      <h4 style="margin:20px; font-size:22px;">A new place to buy and sell textbooks</h4>
+      <div class="col-lg-8">
+
+         <!-- Submit button -->
+         <div class="pt-1 mb-6" style="margin: 20px;">
+          <form action="{% provider_login_url 'google' %}">
+            <button class="btn"  type="submit" >Sign In</button>
+          </form>
+            <style>
+              .btn {
+                border:0px; 
+                background-color: #0c4767; 
+                border-radius:5px; 
+                min-width:300px; 
+                min-height:50px; 
+                color:white; 
+                font-size:24px;
+              }
+              .btn:hover {
+                color:white; 
+                background-color:#063750;
+              }
+            </style>  
+          </div>
+      </div>
+   </div>
+  
+  
+  </div>
+  
+
+  
+      {% endif %}
+ <!-- Section: Design Block -->
+
+      
+   </body>
+</html> 

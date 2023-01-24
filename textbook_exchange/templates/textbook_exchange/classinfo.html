@@ -1,0 +1,275 @@
+{# Load the tag library #}
+{% load bootstrap5 %}
+{% load static %}
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Course Exchange</title>
+  <link rel="icon" type="image/x-icon" href="https://www.freeiconspng.com/thumbs/book-icon/book-stack-icon--icon-search-engine-16.png">
+
+</head>
+<body>    
+  <style>
+    body {
+      background-color:#FCF9F7;
+    }
+    a:hover {
+  opacity: 0.8;
+
+  }
+  </style>
+         <!-- Navbar  -->
+         <nav class="navbar navbar-dark sticky-top" style="background-color: #6db8d2;">
+          <div class="container-fluid" style="display:flex;">
+            <a class="navbar-brand" style="font-size:25px;" href="{% url 'mainView' %}">
+              <img src="https://www.freeiconspng.com/thumbs/book-icon/book-stack-icon--icon-search-engine-16.png" alt="" width="45" height="36" class="d-inline-block align-text-top">
+              Textbooks For Sale
+            </a>
+            <nav class="nav" style="display:flex; align-items:center; justify-content:center;">
+                <a class="nav-link" style="color:white; font-size:20px;" href="{% url 'searchView' %}">Search</a>
+              <!-- <a class="nav-link" style="color:white; font-size:20px;" href="{% url 'allbooks' %}">All Listings</a> -->
+              <a class="nav-link" style="color:white; font-size:20px;" href="{% url 'department_list' %}">Classes</a>
+              <a class="nav-link" style="color:white; font-size:20px;" href="{% url 'SubmissionView' %}">Sell</a>
+              <div class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="{% url 'accountView' %}" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  <img src="{{ user.socialaccount_set.all.0.get_avatar_url }}" style="border-radius: 50%; max-width: 45px; max-height: 45px;">
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <!--<li><a class="dropdown-item" href="https://textbooksforsale.herokuapp.com/accounts/logout/">Logout</a></li>-->
+                  <li><a class="dropdown-item" href="{% url 'accountView' %}">Account</a></li>
+                  <!-- <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li> -->
+                  <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#exampleModal">Logout</a></li>
+                </ul>
+               </div>
+             </nav>
+
+          </div>
+        </nav>
+        <!-- Navbar -->
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal-dialog" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title" id="exampleModalLabel" style="font-size:30px;">Confirm Logout</h5>
+      <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body" style="font-size:24px;">
+      Are you sure you want to log out?
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="font-size:20px;">Cancel</button>
+      <form action="{% url 'logout' %}">
+      <button type="submit" class="btn btn-primary" style="font-size:20px;">Logout</button>
+      </form>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+var myModal = document.getElementById('myModal')
+var myInput = document.getElementById('myInput')
+
+myModal.addEventListener('shown.bs.modal', function () {
+  myInput.focus()
+})
+</script>
+
+
+      <div class="info" >
+        <br>
+        <h3 style="text-align:center;">{{subject}} {{catalog_number}} Textbook Exchange</h3>
+        <br>
+      {% if books %}
+      <h4 style="text-align:center;">Available Textbooks</h4>
+
+            <!-- textbooks -->
+  <div class = "" style="margin:50px;">
+    <div class="row row-cols-1 row-cols-md-4 g-5">
+      {% for book in books %}
+      <a href = "/textbook/details/{{   book.pk     }}/" style="text-decoration: none; color:black;">
+      <div class="col">
+        <div class="card h-100" >
+          {% if book.pk|divisibleby:9 %}
+            <div class="card-img-top" style="background-color:#b6ddfa">
+            <img id={{book.pk}} src="https://media.istockphoto.com/id/1077215560/vector/isometric-book-icon-in-flat-design-style.jpg?s=612x612&w=0&k=20&c=3HrjcKK-rKTjZ5cn81fWdBKySkP4-QXb2x9_D6O_dyw=" style="max-height: 190px;" class="card-img-top"
+              alt="Book" />
+              {% if book.condition == "New" %}
+              <h5><span class="badge bg-success ms-2">{{book.condition}}</span></h5>
+              {% elif book.condition == "Very Good" %}
+              <h5><span class="badge bg-primary ms-2" >{{book.condition}}</span></h5>
+              {% elif book.condition == "Good" %}
+                <h5><span class="badge bg-info ms-2">{{book.condition}}</span></h5>
+              {% elif book.condition == "Fair" %}
+              <h5><span class="badge bg-warning ms-2">{{book.condition}}</span></h5>
+              {% else %}
+              <h5><span class="badge bg-danger ms-2">{{book.condition}}</span></h5>
+              {% endif %}
+            </div>
+          {% elif book.pk|divisibleby:7 %}
+          <div class="card-img-top" style="background-color:#00acc2">
+            <img id={{book.pk}} src="https://media.istockphoto.com/id/1019517774/vector/book-color-icon-on-blue-book-for-reading-and-studying-at-school.jpg?s=612x612&w=0&k=20&c=jnSKNROqE5ro5cKQUieolnoa7yB-jK0TQuNQcAL9Y1w=" style="max-height: 190px;" class="card-img-top"
+              alt="Book" />
+              {% if book.condition == "New" %}
+              <h5><span class="badge bg-success ms-2">{{book.condition}}</span></h5>
+              {% elif book.condition == "Very Good" %}
+              <h5><span class="badge bg-primary ms-2" >{{book.condition}}</span></h5>
+              {% elif book.condition == "Good" %}
+                <h5><span class="badge bg-info ms-2">{{book.condition}}</span></h5>
+              {% elif book.condition == "Fair" %}
+              <h5><span class="badge bg-warning ms-2">{{book.condition}}</span></h5>
+              {% else %}
+              <h5><span class="badge bg-danger ms-2">{{book.condition}}</span></h5>
+              {% endif %}
+            </div>
+          {% elif book.pk|divisibleby:6 %}
+          <div class="card-img-top" style="background-color:#64c5bc">
+            <img id={{book.pk}} src="https://media.istockphoto.com/id/546772166/vector/open-book-icon.jpg?s=612x612&w=0&k=20&c=6XqXy9NSO5-9ZOUeT7fWRBRdsGwGMPIjrwduTYvfLXc=" style="max-height: 190px;" class="card-img-top"
+              alt="Book" />
+              {% if book.condition == "New" %}
+              <h5><span class="badge bg-success ms-2">{{book.condition}}</span></h5>
+              {% elif book.condition == "Very Good" %}
+              <h5><span class="badge bg-primary ms-2" >{{book.condition}}</span></h5>
+              {% elif book.condition == "Good" %}
+                <h5><span class="badge bg-info ms-2">{{book.condition}}</span></h5>
+              {% elif book.condition == "Fair" %}
+              <h5><span class="badge bg-warning ms-2">{{book.condition}}</span></h5>
+              {% else %}
+              <h5><span class="badge bg-danger ms-2">{{book.condition}}</span></h5>
+              {% endif %}
+            </div>
+          {% elif book.pk|divisibleby:5 %}
+          <div class="card-img-top" style="background-color:#badbc8">
+            <img id={{book.pk}} src="https://media.istockphoto.com/id/960184330/vector/open-green-book-flat-design.jpg?s=612x612&w=0&k=20&c=B-1Zh7YfegftUo7mp-aUSnGpjsjWAZunqQK8i_rcQWc=" style="max-height: 190px;" class="card-img-top"
+              alt="Book" />
+              {% if book.condition == "New" %}
+              <h5><span class="badge bg-success ms-2">{{book.condition}}</span></h5>
+              {% elif book.condition == "Very Good" %}
+              <h5><span class="badge bg-primary ms-2" >{{book.condition}}</span></h5>
+              {% elif book.condition == "Good" %}
+                <h5><span class="badge bg-info ms-2">{{book.condition}}</span></h5>
+              {% elif book.condition == "Fair" %}
+              <h5><span class="badge bg-warning ms-2">{{book.condition}}</span></h5>
+              {% else %}
+              <h5><span class="badge bg-danger ms-2">{{book.condition}}</span></h5>
+              {% endif %}
+            </div>
+          {% elif book.pk|divisibleby:4 %}
+          <div class="card-img-top" style="background-color:#30c1be">
+            <img id={{book.pk}} src="https://media.istockphoto.com/id/1144204165/vector/open-book-icon-in-flat-style-literature-vector-illustration-on-isolated-background-library.jpg?s=612x612&w=0&k=20&c=Bvs3P5rFspHINJmLXgVl7c8U-YBg6Cv3jFTPUispF5A=" style="max-height: 190px;" class="card-img-top"
+              alt="Book" />
+              {% if book.condition == "New" %}
+              <h5><span class="badge bg-success ms-2">{{book.condition}}</span></h5>
+              {% elif book.condition == "Very Good" %}
+              <h5><span class="badge bg-primary ms-2" >{{book.condition}}</span></h5>
+              {% elif book.condition == "Good" %}
+                <h5><span class="badge bg-info ms-2">{{book.condition}}</span></h5>
+              {% elif book.condition == "Fair" %}
+              <h5><span class="badge bg-warning ms-2">{{book.condition}}</span></h5>
+              {% else %}
+              <h5><span class="badge bg-danger ms-2">{{book.condition}}</span></h5>
+              {% endif %}
+            </div>
+          {% elif book.pk|divisibleby:3 %}
+          <div class="card-img-top" style="background-color:#7cc5b1">
+            <img id={{book.pk}} src="https://media.istockphoto.com/id/1267515978/vector/open-book-isometric-flat-design-vector-illustration.jpg?s=612x612&w=0&k=20&c=DE9HjAGw7ClVUEHY8ZnUIYJZzcYOCRoTXe5nIL9IJXc=" style="max-height: 190px;" class="card-img-top"
+              alt="Book" />
+              {% if book.condition == "New" %}
+              <h5><span class="badge bg-success ms-2">{{book.condition}}</span></h5>
+              {% elif book.condition == "Very Good" %}
+              <h5><span class="badge bg-primary ms-2" >{{book.condition}}</span></h5>
+              {% elif book.condition == "Good" %}
+                <h5><span class="badge bg-info ms-2">{{book.condition}}</span></h5>
+              {% elif book.condition == "Fair" %}
+              <h5><span class="badge bg-warning ms-2">{{book.condition}}</span></h5>
+              {% else %}
+              <h5><span class="badge bg-danger ms-2">{{book.condition}}</span></h5>
+              {% endif %}
+            </div>
+          {% elif book.pk|divisibleby:2 %}
+          <div class="card-img-top" style="background-color:#b6c7f5">
+            <img id={{book.pk}} src="https://media.istockphoto.com/id/1152677695/vector/book-flat-design-style-on-blue-background-education-vector-illustration.jpg?s=612x612&w=0&k=20&c=x-ciX-Zigt8CZKzpRt-PVGpK3n66raEVMTDG1CaT19A=" style="max-height: 190px;" class="card-img-top"
+              alt="Book" />
+              {% if book.condition == "New" %}
+              <h5><span class="badge bg-success ms-2">{{book.condition}}</span></h5>
+              {% elif book.condition == "Very Good" %}
+              <h5><span class="badge bg-primary ms-2" >{{book.condition}}</span></h5>
+              {% elif book.condition == "Good" %}
+                <h5><span class="badge bg-info ms-2">{{book.condition}}</span></h5>
+              {% elif book.condition == "Fair" %}
+              <h5><span class="badge bg-warning ms-2">{{book.condition}}</span></h5>
+              {% else %}
+              <h5><span class="badge bg-danger ms-2">{{book.condition}}</span></h5>
+              {% endif %}
+            </div>
+          {% else %}
+          <div class="card-img-top" style="background-color:#4f8e97">
+            <img id={{book.pk}} src="https://media.istockphoto.com/id/1415602825/vector/open-empty-book-purple-pink-icon-isolated-on-blue-vector-illustration.jpg?s=612x612&w=0&k=20&c=XjyD_WBBScY9cpnLYM1XkfkHV53o01x7F6BcMaYtz5M=" style="max-height: 190px;" class="card-img-top"
+              alt="Book" />
+              {% if book.condition == "New" %}
+              <h5><span class="badge bg-success ms-2">{{book.condition}}</span></h5>
+              {% elif book.condition == "Very Good" %}
+              <h5><span class="badge bg-primary ms-2" >{{book.condition}}</span></h5>
+              {% elif book.condition == "Good" %}
+                <h5><span class="badge bg-info ms-2">{{book.condition}}</span></h5>
+              {% elif book.condition == "Fair" %}
+              <h5><span class="badge bg-warning ms-2">{{book.condition}}</span></h5>
+              {% else %}
+              <h5><span class="badge bg-danger ms-2">{{book.condition}}</span></h5>
+              {% endif %}
+            </div>
+          {% endif %}
+
+          <div class="card-body" style="text-align:center;">
+            <h4 class="card-title" >{{book.title}}</h4>
+            <p class="card-text">By {{book.author}}</p>
+            <!-- <small class="text-muted" >ISBN: {{book.ISBN}}</small> -->
+          </div>
+          <div class="card-footer" style="border:none; background-color:white;">
+            <h4 style="text-align: center; ">${{book.price}}</h4>
+          </div>
+        </div>
+      </div>
+      </a>
+      {% endfor %}  
+    </div>
+  
+  </div>
+          </div>
+        </div>
+      {% else %}
+      <div style="text-align:center;">
+        <h5>No current listings...</h5>
+        <img style="margin:40px;" src="https://i1.sndcdn.com/artworks-uOCIEu97Gtn5fny7-nSPDsw-t500x500.jpg">
+      </div>
+      {% endif %}
+    </div>
+
+    <a href = "/textbook/departments/{{subject}}" style="text-align:center; display:block; margin:20px; color:gray;">Back</a> 
+
+
+
+
+
+
+  <!-- Footer -->
+  <footer class="text-center text-lg-start bg-light text-muted">
+    <!-- Copyright -->
+    <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">
+    © 2022 Copyright: B-17
+    </div>
+    <!-- Copyright -->
+  </footer>
+  <!-- Footer -->
+
+</body>
+
+</html>
